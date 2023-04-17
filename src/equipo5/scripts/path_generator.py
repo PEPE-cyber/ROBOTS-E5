@@ -49,7 +49,7 @@ cmd_vel.angular.z = 0
 pub.publish(cmd_vel)
  
 
-if _name_ == '_main_':
+if __name__=='__main__':
     try:
         move(2, 0.3, cmd_vel)  # Avanzar
         turn(1.5708, 0.3, cmd_vel) # Girar
