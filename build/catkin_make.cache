@@ -1,0 +1,2 @@
+equipo5:puzzlebot_control:puzzlebot_gazebo:puzzlebot_world
+-DCATKIN_DEVEL_PREFIX=/home/emanuel/workspaces/Puzzle_bot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/emanuel/workspaces/Puzzle_bot_ws/install -G Unix Makefiles

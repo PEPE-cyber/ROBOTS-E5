@@ -1,0 +1,8 @@
+prefix=/home/emanuel/workspaces/Puzzle_bot_ws/install
+
+Name: equipo5
+Description: Description of equipo5
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
