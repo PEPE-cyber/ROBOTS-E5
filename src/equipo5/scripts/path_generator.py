@@ -16,27 +16,28 @@ point.y = 0
  
 pub.publish(point)
 rospy.sleep(2)
-
+# -0.955022
+# 0.752589
 if __name__=='__main__':
     try:
         while not rospy.is_shutdown():
-            point.x = 1.70
-            point.y = 0
+            point.x = -0.953561
+            point.y = -0.918565
             pub.publish(point)
             print("point", 1)
             rospy.sleep(10)
-            point.x = 1.70
-            point.y = 1.70
+            point.x = 0.873742
+            point.y = -0.918565
             pub.publish(point)
             print("point", 2)
             rospy.sleep(10)
-            point.x = 1.70
-            point.y = 0
+            point.y = -0.918565
+            point.x = 0.873742
             pub.publish(point)
             print("point", 3)
             rospy.sleep(10)
-            point.x = 0
-            point.y = 0
+            point.x = -0.955022
+            point.y = 0.752589
             pub.publish(point)
             print("point", 4)
             rospy.sleep(10)

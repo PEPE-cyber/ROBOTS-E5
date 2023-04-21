@@ -3,8 +3,11 @@
 import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, Pose
+from gazebo_msgs.msg import ModelStates
 from math import cos, sin, atan2, pi
+from tf.transformations import euler_from_quaternion
+
 
 # ceate a PID controller class
 class PIDController:
@@ -33,6 +36,7 @@ class PIDController:
 
 
 setpoint = Point()
+pose = Pose()
 wl = 0.0
 wr = 0.0
 angle_set = False
@@ -53,6 +57,9 @@ def wl_callback(msg):
 def wr_callback(msg):
     global wr
     wr = msg.data
+def callback_pose(msg):
+    global pose
+    pose = msg.pose[2]
 
 
 # Define constants
@@ -61,9 +68,8 @@ L = 0.19
 dt = 0.1
 
 
-# subscribe to the topic /path_generator
+# subscribe to the topic /path_generator    print("holi")
 rospy.Subscriber('/set_point', Point, setpoint_callback)
-
 
 
 # Create controllers for linear and angular velocity
@@ -72,9 +78,8 @@ controller_theta = PIDController(4, 0, 0, dt)
 
 rospy.Subscriber('/wl', Float32, wl_callback)
 rospy.Subscriber('/wr', Float32, wr_callback)
-
+rospy.Subscriber('/gazebo/model_states', ModelStates,  callback_pose)
 rospy.init_node('pid_controller')
-
 pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
 
@@ -82,6 +87,7 @@ count = 0
 angle = 0 
 x = 0
 y = 0
+Pose().position.x
 if __name__ == '__main__':
     try:
         twist = Twist()
@@ -98,9 +104,12 @@ if __name__ == '__main__':
             v_l = wl
             v_r = wr
             # Get current position of the robot from each wheel velocity
-            angle += r * (v_r - v_l) * dt / L
-            x += r * (v_r + v_l) / 2 * dt * cos(angle)
-            y += r * (v_r + v_l) / 2 * dt * sin(angle)
+            print(euler_from_quaternion([pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]))
+            angle = euler_from_quaternion([pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w])[2]
+            x = pose.position.x
+            y = pose.position.y
+            print("x", x, "y", y)
+            # y = r * (v_r + v_l) / 2 * dt * sin(angle)
 
             # Calculate the error between the current position and the setpoint
             # error = Point() 
