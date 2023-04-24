@@ -91,15 +91,17 @@ x = 0
 y = 0
 if __name__ == '__main__':
     try:
+        # Variables to store the velocities cmd_vel
         twist = Twist()
         print("init")
+        # Stop the robot
         twist.linear.x = 0
         twist.angular.z = 0
         for i in range(100):
             rospy.sleep(0.01)
             pub.publish(twist)
         rospy.sleep(1)
-        print("start")
+
         while not rospy.is_shutdown():
             # Get current velocities of each wheel
             v_l = wl
@@ -132,14 +134,15 @@ if __name__ == '__main__':
             # print("x:", round(x, 2), "y:", round(y, 2), "angle_error:", round(angle_error,2))
             # print("dis", distance)
 
-
+            # Check if the robot is close enough to the setpoint
             if (distance < 0.05):
                 distance_set = True
             # Calculate the linear and angular velocity
             v = controller_vel.get_control() 
             w = controller_theta.get_control()
             
-            # Publish the linear and angular velocity
+            
+            # Check if the robot angle is pointing to the setpoint
             if abs(angle_error) < 0.01:
                 count += 1
                 if not (count < 10):
@@ -147,8 +150,7 @@ if __name__ == '__main__':
             else:
                 count = 0
 
-
-
+            # Decide if the robot should move forward or rotate
             if not angle_set:
                 v = 0
             else:
@@ -156,7 +158,7 @@ if __name__ == '__main__':
                 if  distance_set:
                     v = 0
 
-
+            # Verify that the velocity is not greater than the maximum speed
             maxSpeed = 1
             if v > maxSpeed:
                 v = maxSpeed
@@ -166,10 +168,11 @@ if __name__ == '__main__':
                 w = maxSpeed
             elif w < -maxSpeed:
                 w = -maxSpeed
-
+            
+            # Set the linear and angular velocity
             twist.linear.x = v
             twist.angular.z = w
-            # print("v", v, "w", w)
+            # Publish the linear and angular velocity
             pub.publish(twist)
             rospy.sleep(dt)
     
