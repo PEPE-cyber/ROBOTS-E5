@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
-    <node name="set_point" pkg="basic_comms" type="path_generator.py" output="screen"/>
+    <node name="set_point" pkg="equipo5" type="path_generator.py" output="screen"/>
+    <node name="controller" pkg="equipo5" type="controller.py" output="screen"/>
 </launch>
 
