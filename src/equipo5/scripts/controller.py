@@ -7,10 +7,12 @@ from math import cos, sin
 # ceate a PID controller class
 class PIDController:
     def __init__(self, kp, ki, kd, dt):
+        # define the PID constants
         self.kp = kp
         self.ki = ki
         self.kd = kd
         self.dt = dt 
+        # Initialize the variables
         self.error = 0
         self.integral = 0
         self.derivative = 0
@@ -18,18 +20,23 @@ class PIDController:
         self.setpoint = 0
 
     def update(self, error):
+        # Update the error
         self.error = error
+        # Calculate the integral with the trapezoidal rule
         self.integral += (self.error + self.last_error) * self.dt / 2
+        # Calculate the derivative
         self.derivative = (self.error - self.last_error) / self.dt
         self.last_error = self.error
 
     def get_control(self):
+        # Obtain the control variable
         return self.kp * self.error + self.ki * self.integral + self.kd * self.derivative
     
     def update_setpoint(self, setpoint):
+        # Update the setpoint
         self.setpoint = setpoint
 
-
+# Define global variables and callbacks to update them
 setpoint = Point()
 wl = 0.0
 wr = 0.0
@@ -47,7 +54,7 @@ def wr_callback(msg):
     wr = msg.data
 
 
-# Define constants
+# Define constants of the model
 r = 0.05
 L = 0.19
 dt = 0.1
